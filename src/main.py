@@ -5,7 +5,7 @@ This is the main entry point into the program
 from pathlib import Path
 from bank_statement_parser.core.extractor import extract_text_from_pdf
 from bank_statement_parser.core.text_writer import write_text_output
-
+from bank_statement_parser.core.sanitizer import sanitize_text
 def main():
     input_dir = Path("input")
     output_dir = Path("output/text")
@@ -18,11 +18,12 @@ def main():
     
     for pdf_path in pdf_files:
         print(f"\n--- Processing: {pdf_path.name} ---\n")
-        text = extract_text_from_pdf(pdf_path)
-
+        raw_text = extract_text_from_pdf(pdf_path)
+        sanitized_list = sanitize_text(raw_text)
+        sanitized_text = "\n".join(sanitized_list)
         output_file = output_dir / f"{pdf_path.stem}.txt"
 
-        write_text_output(text, output_file)
+        write_text_output(sanitized_text, output_file)
 
         print(f"Saved extracted text to {output_file}")
 
