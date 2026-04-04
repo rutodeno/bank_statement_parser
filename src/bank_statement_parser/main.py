@@ -4,29 +4,22 @@ Main entry point for the bank statement parser.
 
 from pathlib import Path
 from core.extractor import extract_text_from_pdf
-from core.text_writer import write_text_output
+from core.text_writer import write_transactions_to_file
+from core.csv_writer import write_transactions_to_csv
 from factory.parser_factory import ParserFactory
 from models.transaction import Transaction
-
-
-def write_transactions_to_file(transactions: list[Transaction], output_path: Path):
-    """
-    Writes parsed transactions to a simple text file.
-    """
-    lines = []
-    for t in transactions:
-        lines.append(f"{t.date} | {t.description} | {t.amount}")
-
-    output_path.write_text("\n".join(lines), encoding="utf-8")
-
 
 def main():
     input_dir = Path("../../input")
     raw_output_dir = Path("../../output/raw")
-    output_dir = Path("../../output/parsed")
+    output_txt = Path("../../output/text")
+    output_csv = Path("../../output/csv")
+
 
     raw_output_dir.mkdir(parents=True, exist_ok=True)
-    output_dir.mkdir(parents=True, exist_ok=True)
+    output_txt.mkdir(parents=True, exist_ok=True)
+    output_csv.mkdir(parents=True, exist_ok=True)
+
 
     pdf_files = list(input_dir.glob("*.pdf"))
 
@@ -51,10 +44,11 @@ def main():
         transactions = parser.parse(raw_text)
 
         # 4. Write output
-        output_file = output_dir / f"{pdf_path.stem}.txt"
-        write_transactions_to_file(transactions, output_file)
-
-        print(f"Saved parsed transactions to {output_file}")
+        output_txt_file = output_txt / f"{pdf_path.stem}.txt"
+        output_csv_file = output_csv / f"{pdf_path.stem}.txt"
+        write_transactions_to_file(transactions, output_txt_file)
+        write_transactions_to_csv(transactions, output_csv_file)
+        print(f"Saved parsed transactions to {output_csv_file} and {output_txt_file}")
 
 
 if __name__ == "__main__":
