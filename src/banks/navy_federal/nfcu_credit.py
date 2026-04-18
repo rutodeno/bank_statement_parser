@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import List
 import re
 
-class NavyFederalParser(BankStatementParser):
+class NFCUCreditParser(BankStatementParser):
 
     def sanitize(self, raw_text: str) -> List[str]:
         cleaned_lines = []
@@ -51,7 +51,7 @@ class NavyFederalParser(BankStatementParser):
                 Transaction(
                     date=datetime.strptime(trans_date, "%m/%d/%y").date(),
                     description=desc.strip(),
-                    amount=float(amount)
+                    amount=-float(amount)
                 )
             )
 

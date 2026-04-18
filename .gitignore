@@ -216,3 +216,7 @@ output/
 *.log
 __pycache__/
 .env
+
+
+# Bash scripts
+*.sh
