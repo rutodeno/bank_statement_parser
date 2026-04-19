@@ -4,6 +4,9 @@ This file handles PDF to text extraction
 
 import pdfplumber
 from pathlib import Path
+import logging
+# This shuts up the font warning spam
+logging.getLogger("pdfminer").setLevel(logging.ERROR)
 
 def extract_text_from_pdf(pdf_path: Path) -> str:
     text = []

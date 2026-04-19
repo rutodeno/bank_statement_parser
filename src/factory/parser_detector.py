@@ -38,7 +38,7 @@ def detect_bank(text: str) -> Bank:
     Uses header detection first, then signal scoring.
     """
     t = text.upper()
-    header = t[:300]  # first 300 chars usually contain the statement header
+    header = t[:500]  # first 500 char
 
     # --- Strong header detection ---
     if "NAVY FEDERAL CREDIT UNION" in header:
@@ -135,11 +135,13 @@ def _detect_account_type_nfcu(t: str) -> AccountType:
     ]
 
     checking_signals = [
+        "BEGINNING BALANCE",
+        "ENDING BALANCE",
+        "AVAILABLE BALANCE",
+        "DEPOSITS",
+        "WITHDRAWALS",
+        "ROUTING NUMBER",
         "CHECKING ACCOUNT",
-        "CHECKING SUMMARY",
-        "SHARE DRAFT",
-        "DEPOSITS AND WITHDRAWALS",
-        "CHECKING ACCOUNT SUMMARY",
     ]
 
     if any(s in t for s in credit_signals):
